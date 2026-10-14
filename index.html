@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edwin's Blox Math Practice</title>
+  <style>
+    :root {
+      --theme-color: #00a2ff;
+      --theme-shadow: #0077b6;
+      --theme-accent: #00d2d3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #1a1d24;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .roblox-card {
+      background-color: #2b2e38;
+      border: 4px solid var(--theme-color);
+      border-radius: 12px;
+      padding: 24px 20px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      position: relative;
+      transition: border-color 0.3s ease;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .header-badge {
+      background: var(--theme-color);
+      color: #fff;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .mute-btn {
+      background: #1e222d;
+      border: 1px solid #485460;
+      color: #fff;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .rank-badge {
+      background: #4b6584;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid #778ca3;
+      transition: all 0.3s ease;
+    }
+
+    .rank-noob { background: #576574; border-color: #8395a7; }
+    .rank-pro { background: #00a2ff; border-color: #70a1ff; color: #fff; }
+    .rank-champion { background: #10ac84; border-color: #1dd1a1; color: #fff; }
+    .rank-dominator { background: #ff9f43; border-color: #feca57; color: #222f3e; font-weight: 900; }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 12px;
+      color: #f1f2f6;
+    }
+
+    /* Theme Picker Bar */
+    .theme-picker {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #a4b0be;
+    }
+
+    .theme-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .theme-dot:hover {
+      transform: scale(1.15);
+    }
+
+    .theme-dot.active {
+      border-color: #ffffff;
+      transform: scale(1.2);
+    }
+
+    .dot-blue { background-color: #00a2ff; }
+    .dot-green { background-color: #10ac84; }
+    .dot-red { background-color: #ee5253; }
+    .dot-gold { background-color: #ffd32a; }
+
+    /* Challenge Mode Toggle */
+    .game-type-toggle {
+      display: flex;
+      background: #1e222d;
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 12px;
+      gap: 4px;
+    }
+
+    .type-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #a4b0be;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: none;
+      transition: all 0.15s ease;
+    }
+
+    .type-btn.active {
+      background: #ffd32a;
+      color: #1e222d;
+      box-shadow: 0 2px 0 #d2a404;
+    }
+
+    /* Math Operation Selector - 5 Modes */
+    .mode-selector {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    .mode-btn {
+      background-color: #1e222d;
+      border: 2px solid #3c404f;
+      color: #a4b0be;
+      padding: 7px 2px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .mode-btn:hover {
+      background-color: #282d3c;
+      color: #ffffff;
+    }
+
+    .mode-btn.active {
+      background-color: var(--theme-color);
+      border-color: var(--theme-color);
+      color: #ffffff;
+      box-shadow: 0 3px 0 var(--theme-shadow);
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      justify-content: space-around;
+      background-color: #1f222b;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      font-weight: 700;
+      font-size: 13px;
+      border: 1px solid #3c404f;
+    }
+
+    .stat-coin { color: #ffd32a; }
+    .stat-streak { color: #0be881; }
+    .stat-highscore { color: #ff9ff3; }
+    .stat-timer { color: #ff5252; font-weight: 800; }
+
+    /* Category Tag */
+    .category-tag {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #ffd32a;
+      margin-bottom: 6px;
+    }
+
+    /* Problem Display Box */
+    .problem-box {
+      background-color: #11141a;
+      border: 3px dashed var(--theme-color);
+      border-radius: 10px;
+      padding: 18px 14px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      color: var(--theme-accent);
+      min-height: 95px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s ease, color 0.3s ease;
+      line-height: 1.35;
+    }
+
+    .problem-box.story-mode {
+      font-size: 17px;
+      font-weight: 600;
+      text-align: left;
+      color: #f1f2f6;
+      letter-spacing: 0;
+      padding: 16px;
+    }
+
+    /* Input & Submit */
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    input[type="number"] {
+      flex: 1;
+      font-size: 22px;
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid #485460;
+      background-color: #1e222d;
+      color: #ffffff;
+      outline: none;
+      font-weight: 700;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--theme-color);
+    }
+
+    .submit-btn {
+      background-color: var(--theme-color);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      font-size: 17px;
+      font-weight: 800;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--theme-shadow);
+      transition: transform 0.1s, box-shadow 0.1s, background-color 0.3s;
+    }
+
+    .submit-btn:hover { filter: brightness(1.1); }
+    .submit-btn:active { transform: translateY(4px); box-shadow: none; }
+
+    /* Feedback Message */
+    .feedback {
+      min-height: 26px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .correct { color: #0be881; }
+    .incorrect { color: #ff3f34; }
+    .levelup { color: #ffd32a; font-size: 17px; }
+
+    /* Speed Run / Controls */
+    .speedrun-controls {
+      margin-top: 10px;
+    }
+
+    .start-speedrun-btn {
+      background-color: #ffd32a;
+      color: #1e222d;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 900;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #d2a404;
+    }
+
+    .start-speedrun-btn:hover { background-color: #ffe066; }
+    .start-speedrun-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    /* Footer reset link */
+    .footer-tools {
+      margin-top: 18px;
+      font-size: 11px;
+      color: #576574;
+    }
+
+    .reset-link {
+      color: #778ca3;
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 11px;
+    }
+
+    .reset-link:hover { color: #ff5252; }
+  </style>
+</head>
+<body>
+
+  <div class="roblox-card">
+    <div class="top-bar">
+      <div class="header-badge">Roblox Edition</div>
+      <div class="top-actions">
+        <button id="muteBtn" class="mute-btn" title="Toggle Sound">🔊</button>
+        <div id="rankBadge" class="rank-badge rank-noob">Rank: Noob</div>
+      </div>
+    </div>
+
+    <h1>Edwin's Math Quest</h1>
+
+    <!-- Color Theme Picker -->
+    <div class="theme-picker">
+      <span>Color Theme:</span>
+      <div class="theme-dot dot-blue active" data-theme="blue" title="Classic Blue"></div>
+      <div class="theme-dot dot-green" data-theme="green" title="Emerald Builder"></div>
+      <div class="theme-dot dot-red" data-theme="red" title="Lava Magma"></div>
+      <div class="theme-dot dot-gold" data-theme="gold" title="Golden VIP"></div>
+    </div>
+
+    <!-- Challenge Mode Selector -->
+    <div class="game-type-toggle">
+      <button id="typePractice" class="type-btn active">Endless Practice</button>
+      <button id="typeSpeedrun" class="type-btn">60s Speed Run</button>
+    </div>
+
+    <!-- Math Modes including 3rd Grade Notebook Mode -->
+    <div class="mode-selector">
+      <button class="mode-btn active" data-mode="add">+ Add</button>
+      <button class="mode-btn" data-mode="sub">&minus; Sub</button>
+      <button class="mode-btn" data-mode="mul">&times; Mul</button>
+      <button class="mode-btn" data-mode="div">&divide; Div</button>
+      <button class="mode-btn" data-mode="grade3">📓 3rd Gr</button>
+    </div>
+
+    <div class="stats-bar">
+      <div>Coins: <span id="coins" class="stat-coin">0</span></div>
+      <div>Streak: <span id="streak" class="stat-streak">0</span></div>
+      <div>High: <span id="highScore" class="stat-highscore">0</span></div>
+      <div id="timerContainer" style="display: none;">Time: <span id="timer" class="stat-timer">60s</span></div>
+    </div>
+
+    <div id="categoryTag" class="category-tag" style="display: none;">3rd Grade Notebook Exercise</div>
+    <div id="question" class="problem-box">? + ?</div>
+
+    <div class="input-group">
+      <input type="number" id="answerInput" placeholder="Answer" autofocus />
+      <button id="submitBtn" class="submit-btn">Check</button>
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+
+    <div id="speedrunControls" class="speedrun-controls" style="display: none;">
+      <button id="startSpeedrunBtn" class="start-speedrun-btn">Start 60s Run</button>
+    </div>
+
+    <div class="footer-tools">
+      <button id="resetBtn" class="reset-link">Reset Saved Progress</button>
+    </div>
+  </div>
+
+  <script>
+    // Theme Definitions
+    const THEMES = {
+      blue: { primary: '#00a2ff', shadow: '#0077b6', accent: '#00d2d3' },
+      green: { primary: '#10ac84', shadow: '#0a7056', accent: '#1dd1a1' },
+      red: { primary: '#ee5253', shadow: '#b33939', accent: '#ff6b6b' },
+      gold: { primary: '#ffd32a', shadow: '#d2a404', accent: '#fff200' }
+    };
+
+    // Edwin 3rd Grade Notebook Exercises Bank
+    const GRADE_3_EXERCISES = [
+      {
+        topic: "Arrays & Multiplication",
+        text: "An art teacher placed 9 rows of markers on a table with 6 markers in each row. How many markers are there in all?",
+        answer: 54
+      },
+      {
+        topic: "Equal Groups & Division",
+        text: "Tyler collected 54 bottle caps for a recycling project and sorted them into 6 equal piles. How many are in each pile?",
+        answer: 9
+      },
+      {
+        topic: "Arrays & Equal Sharing",
+        text: "Mateo has a sheet of stickers arranged in 3 rows with 8 stickers each (24 total). He shares them equally with his brother. How many stickers does each boy receive?",
+        answer: 12
+      },
+      {
+        topic: "Multiplication Array",
+        text: "A cafeteria tray holds 8 juice boxes. A worker placed 6 full trays in the refrigerator. How many total juice boxes are in the refrigerator?",
+        answer: 48
+      },
+      {
+        topic: "Division & Equal Sharing",
+        text: "Chloe and 3 friends (4 people in total) equally share a pack of 32 glow sticks. How many glow sticks does each person receive?",
+        answer: 8
+      },
+      {
+        topic: "Multi-Step Multiplication & Division",
+        text: "Coach Alvarez bought 7 packs of tennis balls with 4 balls per pack (28 balls). He divided them equally between 2 courts. How many balls did each court receive?",
+        answer: 14
+      },
+      {
+        topic: "Equal Groups Division",
+        text: "A librarian has 45 graphic novels to place equally onto 5 empty shelves. How many graphic novels go on each shelf?",
+        answer: 9
+      },
+      {
+        topic: "Strip Diagram / Equal Groups",
+        text: "Three Roblox friends have 12 Blox tokens to share equally. How many tokens does each friend receive?",
+        answer: 4
+      },
+      {
+        topic: "Arrays & Commutative Property",
+        text: "An array of Roblox studs has 4 rows and 8 columns. What is the total number of studs?",
+        answer: 32
+      },
+      {
+        topic: "Repeated Addition & Multiplication",
+        text: "Ryan has 4 boxes with 5 markers in each box (5 + 5 + 5 + 5). What is the total number of markers?",
+        answer: 20
+      },
+      {
+        topic: "Equal Groups Division",
+        text: "Olivia has 60 beads and strings them equally onto 6 bracelets. How many beads are on each bracelet?",
+        answer: 10
+      },
+      {
+        topic: "Multiplication Array",
+        text: "A carton holds 6 juice cans. A grocery clerk stacked 7 cartons on a table. How many cans are on display?",
+        answer: 42
+      },
+      {
+        topic: "Multiplication Array",
+        text: "A farmer gathered 8 cartons of eggs. Each carton holds 12 eggs. How many eggs did the farmer gather altogether?",
+        answer: 96
+      }
+    ];
+
+    let currentMode = 'add';
+    let gameType = 'practice';
+    let isRunning = false;
+    let timeLeft = 60;
+    let timerInterval = null;
+    let speedrunSessionCoins = 0;
+    let isMuted = false;
+
+    let num1 = 0;
+    let num2 = 0;
+    let correctAnswer = 0;
+    let coins = 0;
+    let streak = 0;
+    let highScore = 0;
+    let currentRank = 'Noob';
+
+    // Elements
+    const questionEl = document.getElementById('question');
+    const categoryTag = document.getElementById('categoryTag');
+    const answerInput = document.getElementById('answerInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const coinsEl = document.getElementById('coins');
+    const streakEl = document.getElementById('streak');
+    const highScoreEl = document.getElementById('highScore');
+    const feedbackEl = document.getElementById('feedback');
+    const rankBadgeEl = document.getElementById('rankBadge');
+    const modeButtons = document.querySelectorAll('.mode-btn');
+    const themeDots = document.querySelectorAll('.theme-dot');
+    const muteBtn = document.getElementById('muteBtn');
+
+    const typePracticeBtn = document.getElementById('typePractice');
+    const typeSpeedrunBtn = document.getElementById('typeSpeedrun');
+    const timerContainer = document.getElementById('timerContainer');
+    const timerEl = document.getElementById('timer');
+    const speedrunControls = document.getElementById('speedrunControls');
+    const startSpeedrunBtn = document.getElementById('startSpeedrunBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Web Audio Synthesizer
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playSound(type) {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+
+        if (type === 'coin') {
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc1.type = 'triangle';
+          osc2.type = 'sine';
+
+          osc1.frequency.setValueAtTime(987.77, now);
+          osc1.frequency.setValueAtTime(1318.51, now + 0.08);
+          osc2.frequency.setValueAtTime(1318.51, now + 0.08);
+
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc1.start(now);
+          osc2.start(now + 0.08);
+          osc1.stop(now + 0.32);
+          osc2.stop(now + 0.32);
+        } else if (type === 'oof') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(160, now);
+          osc.frequency.exponentialRampToValueAtTime(75, now + 0.25);
+
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'levelup') {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const startT = now + idx * 0.1;
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(freq, startT);
+            gain.gain.setValueAtTime(0.2, startT);
+            gain.gain.exponentialRampToValueAtTime(0.001, startT + 0.25);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(startT);
+            osc.stop(startT + 0.25);
+          });
+        }
+      } catch (err) {
+        console.log('Audio error:', err);
+      }
+    }
+
+    // Storage Persistence
+    function loadSavedData() {
+      const savedCoins = localStorage.getItem('edwin_blox_coins');
+      const savedHighScore = localStorage.getItem('edwin_speedrun_highscore');
+      const savedTheme = localStorage.getItem('edwin_active_theme');
+      const savedMute = localStorage.getItem('edwin_is_muted');
+
+      if (savedCoins !== null) {
+        coins = parseInt(savedCoins, 10) || 0;
+        coinsEl.textContent = coins;
+      }
+      if (savedHighScore !== null) {
+        highScore = parseInt(savedHighScore, 10) || 0;
+        highScoreEl.textContent = highScore;
+      }
+      if (savedTheme && THEMES[savedTheme]) {
+        applyTheme(savedTheme);
+      }
+      if (savedMute === 'true') {
+        isMuted = true;
+        muteBtn.textContent = '🔇';
+      }
+      checkRank(false);
+    }
+
+    function saveData() {
+      localStorage.setItem('edwin_blox_coins', coins);
+      localStorage.setItem('edwin_speedrun_highscore', highScore);
+    }
+
+    function applyTheme(themeKey) {
+      const theme = THEMES[themeKey];
+      if (!theme) return;
+      document.documentElement.style.setProperty('--theme-color', theme.primary);
+      document.documentElement.style.setProperty('--theme-shadow', theme.shadow);
+      document.documentElement.style.setProperty('--theme-accent', theme.accent);
+
+      themeDots.forEach(dot => {
+        dot.classList.toggle('active', dot.dataset.theme === themeKey);
+      });
+      localStorage.setItem('edwin_active_theme', themeKey);
+    }
+
+    // Rank Logic
+    function checkRank(playAudio = true) {
+      let newRank = 'Noob';
+      let badgeClass = 'rank-badge rank-noob';
+
+      if (coins >= 250) {
+        newRank = 'Math Dominator';
+        badgeClass = 'rank-badge rank-dominator';
+      } else if (coins >= 120) {
+        newRank = 'Blox Champion';
+        badgeClass = 'rank-badge rank-champion';
+      } else if (coins >= 50) {
+        newRank = 'Pro Builder';
+        badgeClass = 'rank-badge rank-pro';
+      }
+
+      if (newRank !== currentRank) {
+        currentRank = newRank;
+        rankBadgeEl.className = badgeClass;
+        rankBadgeEl.textContent = `Rank: ${newRank}`;
+        if (playAudio) {
+          playSound('levelup');
+          feedbackEl.className = 'feedback levelup';
+          feedbackEl.textContent = `RANK UP! Edwin is now a ${newRank}!`;
+        }
+      } else {
+        rankBadgeEl.className = badgeClass;
+        rankBadgeEl.textContent = `Rank: ${newRank}`;
+      }
+    }
+
+    // Question Generator - Includes Edwin 3rd Grade Notebook Mode
+    function generateQuestion() {
+      if (currentMode === 'grade3') {
+        categoryTag.style.display = 'block';
+        questionEl.classList.add('story-mode');
+        const randomIndex = Math.floor(Math.random() * GRADE_3_EXERCISES.length);
+        const exercise = GRADE_3_EXERCISES[randomIndex];
+        categoryTag.textContent = `📓 3rd Grade: ${exercise.topic}`;
+        questionEl.textContent = exercise.text;
+        correctAnswer = exercise.answer;
+      } else {
+        categoryTag.style.display = 'none';
+        questionEl.classList.remove('story-mode');
+
+        if (currentMode === 'add') {
+          num1 = Math.floor(Math.random() * 12) + 1;
+          num2 = Math.floor(Math.random() * 12) + 1;
+          correctAnswer = num1 + num2;
+          questionEl.textContent = `${num1} + ${num2} = ?`;
+        } else if (currentMode === 'sub') {
+          num1 = Math.floor(Math.random() * 15) + 3;
+          num2 = Math.floor(Math.random() * num1) + 1;
+          correctAnswer = num1 - num2;
+          questionEl.textContent = `${num1} \u2212 ${num2} = ?`;
+        } else if (currentMode === 'mul') {
+          num1 = Math.floor(Math.random() * 10) + 1;
+          num2 = Math.floor(Math.random() * 10) + 1;
+          correctAnswer = num1 * num2;
+          questionEl.textContent = `${num1} \u00D7 ${num2} = ?`;
+        } else if (currentMode === 'div') {
+          const divisor = Math.floor(Math.random() * 9) + 2;
+          const quotient = Math.floor(Math.random() * 10) + 1;
+          num1 = divisor * quotient;
+          num2 = divisor;
+          correctAnswer = quotient;
+          questionEl.textContent = `${num1} \u00F7 ${num2} = ?`;
+        }
+      }
+
+      answerInput.value = '';
+      answerInput.focus();
+    }
+
+    function checkAnswer() {
+      if (gameType === 'speedrun' && !isRunning) {
+        feedbackEl.className = 'feedback incorrect';
+        feedbackEl.textContent = 'Click "Start 60s Run" first!';
+        return;
+      }
+
+      const playerAnswer = parseInt(answerInput.value, 10);
+
+      if (isNaN(playerAnswer)) {
+        feedbackEl.className = 'feedback incorrect';
+        feedbackEl.textContent = 'Type a number first!';
+        return;
+      }
+
+      if (playerAnswer === correctAnswer) {
+        const reward = currentMode === 'grade3' ? 20 : 10;
+        coins += reward;
+        streak += 1;
+        if (gameType === 'speedrun') {
+          speedrunSessionCoins += reward;
+        }
+        playSound('coin');
+        coinsEl.textContent = coins;
+        streakEl.textContent = streak;
+        saveData();
+
+        checkRank(true);
+
+        if (feedbackEl.className !== 'feedback levelup') {
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.textContent = `Awesome, Edwin! +${reward} Blox Coins!`;
+        }
+
+        setTimeout(() => {
+          if (feedbackEl.className !== 'feedback levelup') {
+            feedbackEl.textContent = '';
+          }
+          generateQuestion();
+        }, 900);
+      } else {
+        streak = 0;
+        streakEl.textContent = streak;
+        playSound('oof');
+        feedbackEl.className = 'feedback incorrect';
+        feedbackEl.textContent = 'Oof! Try again!';
+        answerInput.select();
+      }
+    }
+
+    // Speed Run Logic
+    function startSpeedrun() {
+      isRunning = true;
+      timeLeft = 60;
+      speedrunSessionCoins = 0;
+      timerEl.textContent = '60s';
+      startSpeedrunBtn.style.display = 'none';
+      answerInput.disabled = false;
+      submitBtn.disabled = false;
+      feedbackEl.textContent = 'Go, Edwin!';
+      feedbackEl.className = 'feedback correct';
+      generateQuestion();
+
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft -= 1;
+        timerEl.textContent = `${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          isRunning = false;
+          answerInput.disabled = true;
+          submitBtn.disabled = true;
+          startSpeedrunBtn.textContent = 'Play Again';
+          startSpeedrunBtn.style.display = 'inline-block';
+          
+          if (speedrunSessionCoins > highScore) {
+            highScore = speedrunSessionCoins;
+            highScoreEl.textContent = highScore;
+            saveData();
+            playSound('levelup');
+            feedbackEl.className = 'feedback levelup';
+            feedbackEl.textContent = `NEW HIGH SCORE! Edwin scored ${speedrunSessionCoins} coins!`;
+          } else {
+            playSound('oof');
+            feedbackEl.className = 'feedback correct';
+            feedbackEl.textContent = `Time's up! Run Score: ${speedrunSessionCoins} (Best: ${highScore})`;
+          }
+        }
+      }, 1000);
+    }
+
+    // Mode Toggles
+    typePracticeBtn.addEventListener('click', () => {
+      gameType = 'practice';
+      typePracticeBtn.classList.add('active');
+      typeSpeedrunBtn.classList.remove('active');
+      timerContainer.style.display = 'none';
+      speedrunControls.style.display = 'none';
+      if (timerInterval) clearInterval(timerInterval);
+      isRunning = true;
+      answerInput.disabled = false;
+      submitBtn.disabled = false;
+      feedbackEl.textContent = '';
+      generateQuestion();
+    });
+
+    typeSpeedrunBtn.addEventListener('click', () => {
+      gameType = 'speedrun';
+      typeSpeedrunBtn.classList.add('active');
+      typePracticeBtn.classList.remove('active');
+      timerContainer.style.display = 'block';
+      speedrunControls.style.display = 'block';
+      isRunning = false;
+      answerInput.disabled = true;
+      submitBtn.disabled = true;
+      questionEl.textContent = 'Ready?';
+      categoryTag.style.display = 'none';
+      feedbackEl.className = 'feedback correct';
+      feedbackEl.textContent = 'Click Start to begin 60-second timer!';
+    });
+
+    startSpeedrunBtn.addEventListener('click', startSpeedrun);
+
+    themeDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        applyTheme(dot.dataset.theme);
+      });
+    });
+
+    modeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        modeButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
+        feedbackEl.textContent = '';
+        generateQuestion();
+      });
+    });
+
+    submitBtn.addEventListener('click', checkAnswer);
+
+    answerInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        checkAnswer();
+      }
+    });
+
+    // Mute Button Toggle
+    muteBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      muteBtn.textContent = isMuted ? '🔇' : '🔊';
+      localStorage.setItem('edwin_is_muted', isMuted);
+    });
+
+    // Reset Progress Button
+    resetBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to reset Edwin’s coins and high score?')) {
+        coins = 0;
+        streak = 0;
+        highScore = 0;
+        coinsEl.textContent = 0;
+        streakEl.textContent = 0;
+        highScoreEl.textContent = 0;
+        localStorage.removeItem('edwin_blox_coins');
+        localStorage.removeItem('edwin_speedrun_highscore');
+        checkRank(false);
+        feedbackEl.className = 'feedback correct';
+        feedbackEl.textContent = 'Progress reset! Ready for a new quest.';
+      }
+    });
+
+    // Initialize Game
+    loadSavedData();
+    generateQuestion();
+  </script>
+</body>
+</html>
